@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "mcp__zai-mcp-server__diagnose_error_screenshot",
+      "mcp__zai-mcp-server__analyze_image",
+      "Bash(python:*)",
+      "Bash(.venvScriptspip install bcrypt)",
+      "Bash(pip install:*)",
+      "Bash(mysql:*)",
+      "Bash(curl:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoidGVzdDAyIiwiZXhwIjoxNzY5NDIyODA3fQ.MET6J6yaKQ5JIDNlRUYcLBNkGMRSU_MFzRSTu79L61E\":*)",
+      "Bash(findstr /i \"env\")",
+      "Bash(npm uninstall:*)",
+      "Bash(git checkout:*)",
+      "Bash(sc:*)",
+      "Bash(findstr:*)",
+      "Bash(where:*)",
+      "Bash(C:UsersztzAppDataLocalMicrosoftWindowsAppspython.exe scriptstest_auth_features.py)",
+      "Bash(echo:*)",
+      "Bash(grep:*)",
+      "Bash(chmod:*)"
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: knowledge_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: knowledge_db
+      MYSQL_USER: knowledge_user
+      MYSQL_PASSWORD: knowledge123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+
+  # FastAPI 后端
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: knowledge_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: mysql+aiomysql://knowledge_user:knowledge123456@mysql:3306/knowledge_db
+      SECRET_KEY: local-dev-secret-key-12345
+      CORS_ORIGINS: '["http://localhost:8096","http://localhost:3000"]'
+      DEBUG: "True"
+    volumes:
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      - mysql
+
+  # 前端开发服务器（可选）
+  frontend:
+    image: node:18-alpine
+    container_name: knowledge_frontend
+    working_dir: /app
+    ports:
+      - "8096:8096"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
