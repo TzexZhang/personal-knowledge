@@ -1,7 +1,7 @@
 """
 笔记相关的 Pydantic 模型
 """
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, computed_field
 from datetime import datetime
 from typing import Optional, List, Any
 
@@ -58,6 +58,13 @@ class NoteResponse(NoteBase):
     # 关联数据
     category: Optional[CategoryResponse] = None
     tags: List[TagResponse] = Field(default_factory=list)
+
+    # 用于前端编辑时回显
+    @computed_field
+    @property
+    def tag_ids(self) -> List[int]:
+        """返回标签ID列表，用于前端编辑回显"""
+        return [tag.id for tag in self.tags] if self.tags else []
 
     model_config = ConfigDict(from_attributes=True)
 
