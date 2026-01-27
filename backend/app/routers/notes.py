@@ -87,7 +87,10 @@ def search_notes(
         NoteSearchResponse: 搜索结果
     """
     # 构建搜索查询（在标题和内容中搜索）
-    query = db.query(Note).filter(
+    query = db.query(Note).options(
+        joinedload(Note.category),
+        joinedload(Note.tags)
+    ).filter(
         Note.user_id == current_user.id,
         or_(
             Note.title.like(f"%{keyword}%"),
@@ -141,7 +144,12 @@ def create_note(
         db_note.tags = tags
 
     db.commit()
-    db.refresh(db_note)
+
+    # 重新查询以获取完整的关联数据
+    db_note = db.query(Note).options(
+        joinedload(Note.category),
+        joinedload(Note.tags)
+    ).filter(Note.id == db_note.id).first()
 
     return db_note
 
@@ -236,7 +244,12 @@ def update_note(
         note.tags = tags
 
     db.commit()
-    db.refresh(note)
+
+    # 重新查询以获取完整的关联数据
+    note = db.query(Note).options(
+        joinedload(Note.category),
+        joinedload(Note.tags)
+    ).filter(Note.id == note_id).first()
 
     return note
 

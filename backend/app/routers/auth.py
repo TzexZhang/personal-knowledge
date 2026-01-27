@@ -279,7 +279,6 @@ async def upload_avatar(
     db.commit()
     db.refresh(current_user)
 
-    return {
-        "avatar_url": avatar_url,
-        "message": "头像上传成功"
-    }
+    # 返回完整的用户信息，包含 avatar_url
+    from app.schemas.user import UserResponse
+    return UserResponse.model_validate(current_user)
