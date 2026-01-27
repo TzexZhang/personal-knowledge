@@ -46,7 +46,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",
         "http://127.0.0.1:8096",
         "http://127.0.0.1:3000",
-        'https://private-personal-knowledge.preview.aliyun-zeabur.cn/'
+        'https://private-personal-knowledge.preview.aliyun-zeabur.cn'
     ]
     CORS_ALLOW_CREDENTIALS: bool = True
 
