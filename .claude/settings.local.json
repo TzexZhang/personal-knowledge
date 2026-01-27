@@ -25,7 +25,10 @@
       "Bash(chmod:*)",
       "mcp__web-reader__webReader",
       "mcp__web-search-prime__webSearchPrime",
-      "WebSearch"
+      "WebSearch",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
