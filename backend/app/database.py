@@ -1,5 +1,6 @@
 """
-数据库配置和会话管理
+数据库配置
+创建数据库连接和会话管理
 """
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,10 +9,12 @@ from app.config import settings
 
 # 创建数据库引擎
 engine = create_engine(
-    settings.DATABASE_URL,
-    pool_pre_ping=True,  # 检查连接是否有效
-    pool_recycle=3600,    # 1小时后回收连接
-    echo=settings.DEBUG    # 开发环境下打印SQL
+    settings.database_url,
+    echo=settings.DEBUG,
+    pool_pre_ping=True,  # 检查连接有效性
+    pool_size=5,
+    max_overflow=10,
+    pool_recycle=3600,  # MySQL 连接回收时间
 )
 
 # 创建会话工厂
@@ -23,8 +26,8 @@ Base = declarative_base()
 
 def get_db():
     """
-    获取数据库会话
-    用于依赖注入，每次请求创建新的会话
+    数据库会话依赖
+    用于 FastAPI 依赖注入
     """
     db = SessionLocal()
     try:

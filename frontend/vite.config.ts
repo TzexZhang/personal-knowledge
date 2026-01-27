@@ -10,13 +10,30 @@ export default defineConfig({
     host: true,
     open: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
+      "/api": {
+        target: "http://localhost:8000",
         changeOrigin: true,
       },
-      '/uploads': {
-        target: 'http://localhost:8000',
+      "/uploads": {
+        target: "http://localhost:8000",
         changeOrigin: true,
+      },
+    },
+  },
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+    // 代码分割优化
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          "antd-vendor": ["antd", "antd-mobile"],
+          "editor-vendor": [
+            "@wangeditor/editor",
+            "@wangeditor/editor-for-react",
+          ],
+        },
       },
     },
   },
