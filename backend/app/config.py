@@ -16,7 +16,6 @@ class Settings(BaseSettings):
     APP_ENV: str = os.getenv("APP_ENV", "production")
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
     SECRET_KEY: str = os.getenv("SECRET_KEY", "wIfxJPaKNpb-Du0_LnAChgyoj7m-Fwj_TO6NNeQWZsg")
-    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "KP3yJzBAHeJt32CnjehY5zgM3CcH8d9uNTd15EJ68h4")
 
     # 数据库配置
     # Zeabur MySQL 会自动注入 MYSQLHOST、MYSQLPORT、MYSQLDATABASE、MYSQLUSER、MYSQLPASSWORD 等环境变量
@@ -36,7 +35,7 @@ class Settings(BaseSettings):
         )
 
     # JWT 配置
-    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "your-jwt-secret-key-change-this")
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "KP3yJzBAHeJt32CnjehY5zgM3CcH8d9uNTd15EJ68h4")
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
