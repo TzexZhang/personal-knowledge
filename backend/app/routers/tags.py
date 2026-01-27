@@ -11,7 +11,7 @@ from app.models import Tag, User
 from app.schemas.tag import TagCreate, TagUpdate, TagResponse
 from app.dependencies import get_current_user
 
-router = APIRouter(prefix="/tags", tags=["标签"])
+router = APIRouter(tags=["标签"])
 
 
 @router.get("", response_model=List[TagResponse])

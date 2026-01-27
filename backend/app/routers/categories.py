@@ -11,7 +11,7 @@ from app.models import Category, User, Note
 from app.schemas.category import CategoryCreate, CategoryUpdate, CategoryResponse
 from app.dependencies import get_current_user
 
-router = APIRouter(prefix="/categories", tags=["分类"])
+router = APIRouter(tags=["分类"])
 
 
 @router.get("", response_model=List[CategoryResponse])

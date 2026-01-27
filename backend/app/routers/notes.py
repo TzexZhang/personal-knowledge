@@ -12,7 +12,7 @@ from app.models import Note, User, Tag, Category
 from app.schemas.note import NoteCreate, NoteUpdate, NoteResponse, NoteListResponse, NoteSearchResponse
 from app.dependencies import get_current_user
 
-router = APIRouter(prefix="/notes", tags=["笔记"])
+router = APIRouter(tags=["笔记"])
 
 
 @router.get("", response_model=NoteListResponse)

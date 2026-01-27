@@ -15,7 +15,7 @@ from app.dependencies import get_current_user
 from app.config import settings
 import os
 
-router = APIRouter(prefix="/auth", tags=["认证"])
+router = APIRouter(tags=["认证"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
