@@ -57,23 +57,23 @@ app.include_router(notes.router, prefix="/api/notes", tags=["笔记"])
 async def startup_event():
     """
     应用启动事件
-    创建数据库表并检查连接
+    创建数据库表
     """
     try:
-        logger.info(f"正在连接数据库: {settings.MYSQL_HOST}:{settings.MYSQL_PORT}/{settings.MYSQL_DB}")
-        
+        logger.info(f"正在初始化数据库: {settings.MYSQL_HOST}:{settings.MYSQL_PORT}/{settings.MYSQL_DB}")
+
+        # 创建所有表（如果表已存在则跳过）
+        Base.metadata.create_all(bind=engine)
+        logger.info("✅ 数据库表创建成功")
+
         # 测试数据库连接
         with engine.connect() as connection:
             logger.info("✅ 数据库连接成功")
-        
-        # 创建所有表
-        Base.metadata.create_all(bind=engine)
-        logger.info("✅ 数据库表创建成功")
-        
+
     except Exception as e:
-        logger.error(f"❌ 数据库连接失败: {str(e)}")
+        logger.error(f"❌ 数据库初始化失败: {str(e)}")
         logger.error(f"数据库配置: {settings.database_url}")
-        # 不抛出异常，允许应用启动（可能数据库暂时不可用）
+        # 不抛出异常，允许应用启动
         # 这样可以让应用启动，等待数据库就绪
 
 

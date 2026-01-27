@@ -36,7 +36,7 @@ const NoteDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   // 更健壮的检查：使用 location.pathname 而不是 id 参数
-  const isNew = location.pathname === '/notes/new' || id === 'new';
+  const isNew = location.pathname === "/notes/new" || id === "new";
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState<boolean>(false);
@@ -103,7 +103,7 @@ const NoteDetailPage: React.FC = () => {
   const handleSave = async () => {
     try {
       const values = await form.validateFields();
-      console.log('表单提交的值:', values);
+      console.log("表单提交的值:", values);
       setSaving(true);
       if (isNew) {
         await noteAPI.createNote(values);
@@ -233,15 +233,21 @@ const NoteDetailPage: React.FC = () => {
             <Input placeholder="输入笔记标题" size="large" />
           </Form.Item>
 
-          <Form.Item label="分类" name="category_id">
-            <Space.Compact style={{ width: '100%' }}>
-              <Select placeholder="选择分类（可选）" allowClear style={{ flex: 1 }}>
-                {categories.map((cat) => (
-                  <Option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </Option>
-                ))}
-              </Select>
+          <Form.Item label="分类">
+            <Space.Compact style={{ width: "100%" }}>
+              <Form.Item name="category_id" style={{ flex: 1, marginBottom: 0 }}>
+                <Select
+                  placeholder="选择分类（可选）"
+                  allowClear
+                  style={{ flex: 1 }}
+                >
+                  {categories.map((cat) => (
+                    <Option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setCategoryModalVisible(true)}
@@ -251,32 +257,34 @@ const NoteDetailPage: React.FC = () => {
             </Space.Compact>
           </Form.Item>
 
-          <Form.Item label="标签" name="tag_ids">
-            <Space.Compact style={{ width: '100%' }}>
-              <Select
-                mode="multiple"
-                placeholder="选择标签（可多选）"
-                allowClear
-                style={{ flex: 1 }}
-                tagRender={(props) => {
-                  const { label, closable, onClose } = props;
-                  return (
-                    <Tag
-                      closable={closable}
-                      onClose={onClose}
-                      style={{ marginRight: 3 }}
-                    >
-                      {label}
-                    </Tag>
-                  );
-                }}
-              >
-                {allTags.map((tag) => (
-                  <Option key={tag.id} value={tag.id}>
-                    {tag.name}
-                  </Option>
-                ))}
-              </Select>
+          <Form.Item label="标签">
+            <Space.Compact style={{ width: "100%" }}>
+              <Form.Item name="tag_ids" style={{ flex: 1, marginBottom: 0 }}>
+                <Select
+                  mode="multiple"
+                  placeholder="选择标签（可多选）"
+                  allowClear
+                  style={{ flex: 1 }}
+                  tagRender={(props) => {
+                    const { label, closable, onClose } = props;
+                    return (
+                      <Tag
+                        closable={closable}
+                        onClose={onClose}
+                        style={{ marginRight: 3 }}
+                      >
+                        {label}
+                      </Tag>
+                    );
+                  }}
+                >
+                  {allTags.map((tag) => (
+                    <Option key={tag.id} value={tag.id}>
+                      {tag.name}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => setTagModalVisible(true)}
@@ -292,7 +300,7 @@ const NoteDetailPage: React.FC = () => {
             rules={[{ required: true, message: "请输入笔记内容" }]}
           >
             <WangEditor
-              key={isNew ? 'new' : id}
+              key={isNew ? "new" : id}
               placeholder="在这里输入笔记内容，支持富文本格式..."
             />
           </Form.Item>

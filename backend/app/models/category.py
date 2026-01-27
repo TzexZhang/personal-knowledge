@@ -1,10 +1,11 @@
 """
 分类模型
 """
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
+from sqlalchemy import Column, String, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
+import uuid
 
 
 class Category(Base):
@@ -14,11 +15,11 @@ class Category(Base):
     """
     __tablename__ = "categories"
 
-    id = Column(Integer, primary_key=True, index=True, comment="分类ID")
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, comment="用户ID")
+    id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()), comment="分类ID")
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, comment="用户ID")
     name = Column(String(100), nullable=False, comment="分类名称")
     description = Column(Text, nullable=True, comment="分类描述")
-    parent_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True, comment="父分类ID")
+    parent_id = Column(String(36), ForeignKey("categories.id", ondelete="SET NULL"), nullable=True, comment="父分类ID")
     color = Column(String(20), nullable=True, comment="分类颜色")
     sort_order = Column(Integer, default=0, comment="排序顺序")
 

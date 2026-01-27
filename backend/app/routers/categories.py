@@ -77,7 +77,7 @@ def create_category(
 
 @router.get("/{category_id}", response_model=CategoryResponse)
 def get_category(
-    category_id: int,
+    category_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -111,7 +111,7 @@ def get_category(
 
 @router.put("/{category_id}", response_model=CategoryResponse)
 def update_category(
-    category_id: int,
+    category_id: str,
     category_update: CategoryUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -155,7 +155,7 @@ def update_category(
 
 @router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_category(
-    category_id: int,
+    category_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

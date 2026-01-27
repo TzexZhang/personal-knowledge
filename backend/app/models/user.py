@@ -1,10 +1,11 @@
 """
 用户模型
 """
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean
+from sqlalchemy import Column, String, Text, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
+import uuid
 
 
 class User(Base):
@@ -14,7 +15,7 @@ class User(Base):
     """
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True, index=True, comment="用户ID")
+    id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()), comment="用户ID")
     username = Column(String(50), unique=True, nullable=False, index=True, comment="用户名")
     email = Column(String(100), unique=True, nullable=False, index=True, comment="邮箱")
     password_hash = Column(String(255), nullable=False, comment="密码哈希")

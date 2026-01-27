@@ -29,7 +29,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(UserBase):
     """用户响应模型"""
-    id: int
+    id: str
     avatar: Optional[str] = None
     theme_preference: str
     primary_color: str
@@ -49,8 +49,7 @@ class UserResponse(UserBase):
             return self.avatar
         return None
 
-    class Config:
-        from_attributes = True  # 支持从 ORM 对象创建
+    model_config = {"from_attributes": True}
 
 
 class UserLogin(BaseModel):

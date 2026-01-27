@@ -1,10 +1,11 @@
 """
 标签模型
 """
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
+import uuid
 
 
 class Tag(Base):
@@ -14,8 +15,8 @@ class Tag(Base):
     """
     __tablename__ = "tags"
 
-    id = Column(Integer, primary_key=True, index=True, comment="标签ID")
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, comment="用户ID")
+    id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()), comment="标签ID")
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, comment="用户ID")
     name = Column(String(50), nullable=False, comment="标签名称")
     color = Column(String(20), nullable=True, comment="标签颜色")
 

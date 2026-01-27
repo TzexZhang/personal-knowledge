@@ -1,10 +1,11 @@
 """
 笔记模型
 """
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, DateTime, BigInteger
+from sqlalchemy import Column, String, Text, ForeignKey, Boolean, DateTime, Integer
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
+import uuid
 
 
 class NoteTag(Base):
@@ -14,9 +15,9 @@ class NoteTag(Base):
     """
     __tablename__ = "note_tags"
 
-    id = Column(Integer, primary_key=True, index=True, comment="关联ID")
-    note_id = Column(Integer, ForeignKey("notes.id", ondelete="CASCADE"), nullable=False, comment="笔记ID")
-    tag_id = Column(Integer, ForeignKey("tags.id", ondelete="CASCADE"), nullable=False, comment="标签ID")
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()), comment="关联ID")
+    note_id = Column(String(36), ForeignKey("notes.id", ondelete="CASCADE"), nullable=False, comment="笔记ID")
+    tag_id = Column(String(36), ForeignKey("tags.id", ondelete="CASCADE"), nullable=False, comment="标签ID")
 
     created_at = Column(DateTime(timezone=True), server_default=func.now(), comment="创建时间")
 
@@ -31,9 +32,9 @@ class Note(Base):
     """
     __tablename__ = "notes"
 
-    id = Column(Integer, primary_key=True, index=True, comment="笔记ID")
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, comment="用户ID")
-    category_id = Column(Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True, comment="分类ID")
+    id = Column(String(36), primary_key=True, index=True, default=lambda: str(uuid.uuid4()), comment="笔记ID")
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, comment="用户ID")
+    category_id = Column(String(36), ForeignKey("categories.id", ondelete="SET NULL"), nullable=True, comment="分类ID")
     title = Column(String(200), nullable=False, comment="笔记标题")
     content = Column(Text, nullable=True, comment="笔记内容（支持Markdown）")
 

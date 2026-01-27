@@ -80,7 +80,7 @@ def create_tag(
 
 @router.get("/{tag_id}", response_model=TagResponse)
 def get_tag(
-    tag_id: int,
+    tag_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -114,7 +114,7 @@ def get_tag(
 
 @router.put("/{tag_id}", response_model=TagResponse)
 def update_tag(
-    tag_id: int,
+    tag_id: str,
     tag_update: TagUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -158,7 +158,7 @@ def update_tag(
 
 @router.delete("/{tag_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_tag(
-    tag_id: int,
+    tag_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

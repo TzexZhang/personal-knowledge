@@ -156,7 +156,7 @@ def create_note(
 
 @router.get("/{note_id}", response_model=NoteResponse)
 def get_note(
-    note_id: int,
+    note_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -191,14 +191,22 @@ def get_note(
     # 增加浏览次数
     note.view_count += 1
     db.commit()
-    db.refresh(note)
+
+    # 重新查询以获取完整的关联数据
+    note = db.query(Note).options(
+        joinedload(Note.category),
+        joinedload(Note.tags)
+    ).filter(
+        Note.id == note_id,
+        Note.user_id == current_user.id
+    ).first()
 
     return note
 
 
 @router.put("/{note_id}", response_model=NoteResponse)
 def update_note(
-    note_id: int,
+    note_id: str,
     note_update: NoteUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -256,7 +264,7 @@ def update_note(
 
 @router.delete("/{note_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_note(
-    note_id: int,
+    note_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):

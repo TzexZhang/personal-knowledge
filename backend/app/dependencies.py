@@ -57,13 +57,9 @@ def get_current_user(
 
         print(f"[DEBUG] user_id from payload: {user_id_str} (type: {type(user_id_str).__name__})", flush=True)
 
-        # 将字符串sub转换为整数（用于数据库查询）
-        try:
-            user_id = int(user_id_str)
-            print(f"[DEBUG] user_id after int(): {user_id}", flush=True)
-        except (ValueError, TypeError) as e:
-            print(f"[DEBUG] int() conversion failed: {e}", flush=True)
-            raise credentials_exception
+        # user_id 现在就是 string 类型，直接使用
+        user_id = user_id_str
+        print(f"[DEBUG] user_id: {user_id}", flush=True)
 
         # 查询用户
         user = db.query(User).filter(User.id == user_id).first()

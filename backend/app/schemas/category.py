@@ -10,7 +10,7 @@ class CategoryBase(BaseModel):
     """分类基础模型"""
     name: str = Field(..., min_length=1, max_length=100, description="分类名称")
     description: Optional[str] = Field(None, description="分类描述")
-    parent_id: Optional[int] = Field(None, description="父分类ID")
+    parent_id: Optional[str] = Field(None, description="父分类ID")
     color: Optional[str] = Field(None, pattern="^#[0-9A-Fa-f]{6}$", description="分类颜色")
     sort_order: int = Field(0, description="排序顺序")
 
@@ -24,16 +24,15 @@ class CategoryUpdate(BaseModel):
     """分类更新模型"""
     name: Optional[str] = Field(None, min_length=1, max_length=100)
     description: Optional[str] = None
-    parent_id: Optional[int] = None
+    parent_id: Optional[str] = None
     color: Optional[str] = Field(None, pattern="^#[0-9A-Fa-f]{6}$")
     sort_order: Optional[int] = None
 
 
 class CategoryResponse(CategoryBase):
     """分类响应模型"""
-    id: int
-    user_id: int
+    id: str
+    user_id: str
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}

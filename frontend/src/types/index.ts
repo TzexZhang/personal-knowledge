@@ -36,7 +36,7 @@ export interface LoginResponse {
 }
 
 export interface UserProfile {
-  id: number
+  id: string
   username: string
   email: string
   avatar?: string
@@ -50,7 +50,7 @@ export interface UserProfile {
 // ==================== 分类类型 ====================
 
 export interface Category {
-  id: number
+  id: string
   name: string
   description?: string
   created_at: string
@@ -69,7 +69,7 @@ export interface UpdateCategoryRequest {
 // ==================== 标签类型 ====================
 
 export interface Tag {
-  id: number
+  id: string
   name: string
   created_at: string
 }
@@ -85,14 +85,14 @@ export interface UpdateTagRequest {
 // ==================== 笔记类型 ====================
 
 export interface Note {
-  id: number
+  id: string
   title: string
   content: string
   summary?: string
-  category_id?: number
+  category_id?: string
   category?: Category
   tags: Tag[]
-  tag_ids?: number[]
+  tag_ids?: string[]
   is_favorite: boolean
   view_count: number
   created_at: string
@@ -103,8 +103,8 @@ export interface CreateNoteRequest {
   title: string
   content: string
   summary?: string
-  category_id?: number
-  tag_ids?: number[]
+  category_id?: string
+  tag_ids?: string[]
   is_favorite?: boolean
 }
 
@@ -112,8 +112,8 @@ export interface UpdateNoteRequest {
   title?: string
   content?: string
   summary?: string
-  category_id?: number
-  tag_ids?: number[]
+  category_id?: string
+  tag_ids?: string[]
   is_favorite?: boolean
 }
 
@@ -121,8 +121,8 @@ export interface NoteListParams {
   page?: number
   page_size?: number
   keyword?: string
-  category_id?: number | null
-  tag_id?: number
+  category_id?: string | null
+  tag_id?: string
   is_favorite?: boolean | null
 }
 
@@ -183,6 +183,6 @@ export interface LoginFormValues {
 export interface NoteFormValues {
   title: string
   content: string
-  category_id?: number
-  tag_ids?: number[]
+  category_id?: string
+  tag_ids?: string[]
 }
