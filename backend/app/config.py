@@ -15,11 +15,12 @@ class Settings(BaseSettings):
     APP_NAME: str = "Personal Knowledge Base"
     APP_ENV: str = os.getenv("APP_ENV", "production")
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "your-secret-key-change-this")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "wIfxJPaKNpb-Du0_LnAChgyoj7m-Fwj_TO6NNeQWZsg")
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "KP3yJzBAHeJt32CnjehY5zgM3CcH8d9uNTd15EJ68h4")
 
     # 数据库配置
     # Zeabur MySQL 会自动注入 MYSQLHOST、MYSQLPORT、MYSQLDATABASE、MYSQLUSER、MYSQLPASSWORD 等环境变量
-    MYSQL_HOST: Optional[str] = os.getenv("MYSQLHOST", "localhost")
+    MYSQL_HOST: Optional[str] = os.getenv("MYSQLHOST", "120.55.167.119")
     MYSQL_PORT: Optional[int] = int(os.getenv("MYSQLPORT", "3306"))
     MYSQL_USER: Optional[str] = os.getenv("MYSQLUSER", "root")
     MYSQL_PASSWORD: Optional[str] = os.getenv("MYSQLPASSWORD", "root")
