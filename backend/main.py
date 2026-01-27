@@ -23,8 +23,8 @@ app = FastAPI(
     title=settings.APP_NAME,
     description="个人知识库管理系统 API",
     version="1.0.0",
-    docs_url="/docs",  # Swagger UI 文档地址
-    redoc_url="/redoc"  # ReDoc 文档地址
+    docs_url="/api/docs",  # Swagger UI 文档地址
+    redoc_url="/api/redoc"  # ReDoc 文档地址
 )
 
 
@@ -45,14 +45,19 @@ app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
 
 # 注册路由
-app.include_router(auth.router, prefix="/api")
-app.include_router(categories.router, prefix="/api")
-app.include_router(tags.router, prefix="/api")
-app.include_router(notes.router, prefix="/api")
+# app.include_router(auth.router, prefix="/api")
+# app.include_router(categories.router, prefix="/api")
+# app.include_router(tags.router, prefix="/api")
+# app.include_router(notes.router, prefix="/api")
+
+app.include_router(auth.router, prefix="/api/auth", tags=["认证"])
+app.include_router(categories.router, prefix="/api/categories", tags=["分类"])
+app.include_router(tags.router, prefix="/api/tags", tags=["标签"])
+app.include_router(notes.router, prefix="/api/notes", tags=["笔记"])
 
 
 @app.on_event("startup")
-def startup_event():
+async def startup_event():
     """
     应用启动事件
     创建数据库表
@@ -81,7 +86,8 @@ def health_check():
     健康检查接口
     用于容器编排系统的健康检查
     """
-    return {"status": "healthy"}
+    return {"status": "ok", "message": "服务运行正常"}
+    # return {"status": "healthy"}
 
 
 if __name__ == "__main__":

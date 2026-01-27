@@ -22,7 +22,9 @@
       "Bash(C:UsersztzAppDataLocalMicrosoftWindowsAppspython.exe scriptstest_auth_features.py)",
       "Bash(echo:*)",
       "Bash(grep:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "mcp__web-reader__webReader",
+      "mcp__web-search-prime__webSearchPrime"
     ]
   }
 }
