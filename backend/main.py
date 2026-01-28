@@ -53,6 +53,73 @@ app.include_router(tags.router, prefix="/api/tags", tags=["标签"])
 app.include_router(notes.router, prefix="/api/notes", tags=["笔记"])
 
 
+def check_and_rebuild_database():
+    """
+    检查数据库是否使用旧的 Integer ID schema
+    如果是，自动重建数据库（会丢失所有数据）
+    """
+    from sqlalchemy import text, inspect
+    import uuid
+
+    try:
+        inspector = inspect(engine)
+
+        if 'users' not in inspector.get_table_names():
+            logger.info("数据库不存在，将创建新表")
+            return
+
+        # 检查 users.id 的类型
+        users_columns = inspector.get_columns('users')
+        id_column = next((col for col in users_columns if col['name'] == 'id'), None)
+
+        if not id_column:
+            return
+
+        # 检查是否为 Integer 类型
+        is_integer_id = 'INT' in str(id_column['type']).upper()
+
+        if not is_integer_id:
+            logger.info("✅ 数据库已使用 UUID String 类型")
+            return
+
+        # ⚠️ 检测到旧的 Integer ID schema，需要重建
+        logger.warning("⚠️  检测到数据库使用旧的 Integer ID schema")
+        logger.warning("⚠️  需要重建数据库以支持 UUID ID（会删除所有数据）")
+
+        # 从环境变量读取是否允许自动重建
+        import os
+        auto_rebuild = os.getenv('AUTO_REBUILD_DATABASE', 'false').lower() == 'true'
+
+        if not auto_rebuild:
+            logger.error("❌ 自动重建已禁用")
+            logger.error("请设置环境变量 AUTO_REBUILD_DATABASE=true 以自动重建")
+            logger.error("或者手动执行以下 SQL:")
+            logger.error("  DROP TABLE IF EXISTS note_tags, notes, tags, categories, users;")
+            raise Exception("数据库 schema 不匹配：需要将 Integer ID 迁移到 UUID String")
+
+        logger.info("🔄 开始自动重建数据库...")
+
+        with engine.connect() as conn:
+            # 删除所有表（按依赖顺序）
+            logger.info("删除旧表...")
+            conn.execute(text("DROP TABLE IF EXISTS note_tags"))
+            conn.execute(text("DROP TABLE IF EXISTS notes"))
+            conn.execute(text("DROP TABLE IF EXISTS tags"))
+            conn.execute(text("DROP TABLE IF EXISTS categories"))
+            conn.execute(text("DROP TABLE IF EXISTS users"))
+            conn.commit()
+
+        logger.info("✅ 旧表已删除，将创建新表")
+
+    except Exception as e:
+        logger.error(f"数据库检查失败: {str(e)}")
+        import os
+        auto_rebuild = os.getenv('AUTO_REBUILD_DATABASE', 'false').lower() == 'true'
+        if not auto_rebuild:
+            raise
+        logger.warning("继续启动...")
+
+
 def migrate_database():
     """
     自动迁移数据库：添加缺失的字段
@@ -115,6 +182,9 @@ async def startup_event():
     """
     try:
         logger.info(f"正在初始化数据库: {settings.MYSQL_HOST}:{settings.MYSQL_PORT}/{settings.MYSQL_DB}")
+
+        # 检查数据库 schema，自动重建如果不匹配
+        check_and_rebuild_database()
 
         # 创建所有表（如果表已存在则跳过）
         Base.metadata.create_all(bind=engine)
