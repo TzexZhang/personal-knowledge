@@ -147,15 +147,15 @@ export const categoryAPI = {
     api.post('/api/categories', data),
 
   // 获取分类详情
-  getCategory: (id: number): Promise<Category> =>
+  getCategory: (id: string): Promise<Category> =>
     api.get(`/api/categories/${id}`),
 
   // 更新分类
-  updateCategory: (id: number, data: UpdateCategoryRequest): Promise<Category> =>
+  updateCategory: (id: string, data: UpdateCategoryRequest): Promise<Category> =>
     api.put(`/api/categories/${id}`, data),
 
   // 删除分类
-  deleteCategory: (id: number): Promise<void> =>
+  deleteCategory: (id: string): Promise<void> =>
     api.delete(`/api/categories/${id}`),
 }
 
@@ -172,15 +172,15 @@ export const tagAPI = {
     api.post('/api/tags', data),
 
   // 获取标签详情
-  getTag: (id: number): Promise<Tag> =>
+  getTag: (id: string): Promise<Tag> =>
     api.get(`/api/tags/${id}`),
 
   // 更新标签
-  updateTag: (id: number, data: UpdateTagRequest): Promise<Tag> =>
+  updateTag: (id: string, data: UpdateTagRequest): Promise<Tag> =>
     api.put(`/api/tags/${id}`, data),
 
   // 删除标签
-  deleteTag: (id: number): Promise<void> =>
+  deleteTag: (id: string): Promise<void> =>
     api.delete(`/api/tags/${id}`),
 }
 
@@ -201,18 +201,18 @@ export const noteAPI = {
     api.post('/api/notes', data),
 
   // 获取笔记详情
-  getNoteDetail: (id: number | string): Promise<Note> =>
+  getNoteDetail: (id: string): Promise<Note> =>
     api.get(`/api/notes/${id}`),
 
-  getNote: (id: number | string): Promise<Note> =>
+  getNote: (id: string): Promise<Note> =>
     api.get(`/api/notes/${id}`), // 别名，兼容性
 
   // 更新笔记
-  updateNote: (id: number | string, data: UpdateNoteRequest): Promise<Note> =>
+  updateNote: (id: string, data: UpdateNoteRequest): Promise<Note> =>
     api.put(`/api/notes/${id}`, data),
 
   // 删除笔记
-  deleteNote: (id: number | string): Promise<void> =>
+  deleteNote: (id: string): Promise<void> =>
     api.delete(`/api/notes/${id}`),
 }
 

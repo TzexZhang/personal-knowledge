@@ -19,8 +19,8 @@ router = APIRouter(tags=["笔记"])
 def get_notes(
     page: int = Query(1, ge=1, description="页码"),
     page_size: int = Query(20, ge=1, le=100, description="每页记录数"),
-    category_id: Optional[int] = Query(None, description="分类ID筛选"),
-    tag_id: Optional[int] = Query(None, description="标签ID筛选"),
+    category_id: Optional[str] = Query(None, description="分类ID筛选"),
+    tag_id: Optional[str] = Query(None, description="标签ID筛选"),
     is_favorite: Optional[bool] = Query(None, description="是否收藏筛选"),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
