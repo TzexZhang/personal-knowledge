@@ -119,7 +119,7 @@ export const authAPI = {
     api.post('/api/auth/change-password', data),
 
   // 上传头像
-  uploadAvatar: (file: File): Promise<{ avatar_url: string }> => {
+  uploadAvatar: (file: File): Promise<UserProfile> => {
     const formData = new FormData()
     formData.append('file', file)
     return api.post('/api/auth/upload-avatar', formData, {

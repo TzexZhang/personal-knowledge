@@ -44,6 +44,18 @@ const Settings: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [avatarUploading, setAvatarUploading] = useState<boolean>(false)
 
+  // 获取完整的头像URL
+  const getFullAvatarUrl = (url: string | null | undefined): string | undefined => {
+    if (!url) return undefined
+    // 如果已经是完整URL，直接返回
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url
+    }
+    // 否则拼接API基础URL
+    const apiBaseUrl = import.meta.env.VITE_API_URL || ''
+    return apiBaseUrl + url
+  }
+
   // 预设主题色
   const presetColors = [
     { name: '拂晓蓝', value: '#1890ff' },
@@ -69,7 +81,11 @@ const Settings: React.FC = () => {
       setUserProfile(userInfo)
 
       if (userInfo.avatar_url) {
-        localStorage.setItem('avatar', userInfo.avatar_url)
+        // 存储完整的URL
+        const fullAvatarUrl = getFullAvatarUrl(userInfo.avatar_url)
+        if (fullAvatarUrl) {
+          localStorage.setItem('avatar', fullAvatarUrl)
+        }
         // 触发自定义事件通知其他组件
         window.dispatchEvent(new Event('avatarUpdated'))
       }
@@ -91,19 +107,28 @@ const Settings: React.FC = () => {
     setAvatarUploading(true)
     try {
       const result = await authAPI.uploadAvatar(file as File)
+      console.log('上传头像返回结果:', result)
       message.success('头像上传成功')
 
       // 更新用户信息
       if (userProfile) {
-        const updatedProfile = { ...userProfile, avatar_url: result.avatar_url }
+        const avatarUrl = result.avatar_url || result.avatar
+        const fullAvatarUrl = getFullAvatarUrl(avatarUrl)
+        console.log('头像URL:', avatarUrl, '完整URL:', fullAvatarUrl)
+
+        const updatedProfile = { ...userProfile, avatar_url: avatarUrl }
         setUserProfile(updatedProfile)
-        localStorage.setItem('avatar', result.avatar_url)
+
+        if (fullAvatarUrl) {
+          localStorage.setItem('avatar', fullAvatarUrl)
+        }
         // 触发自定义事件通知其他组件
         window.dispatchEvent(new Event('avatarUpdated'))
       }
       onSuccess?.(result)
     } catch (error) {
       message.error('头像上传失败')
+      console.error('头像上传错误:', error)
       onError?.(error as Error)
     } finally {
       setAvatarUploading(false)
@@ -195,7 +220,7 @@ const Settings: React.FC = () => {
             <div style={{ textAlign: 'center', marginBottom: 24 }}>
               <Avatar
                 size={80}
-                src={userProfile?.avatar_url || localStorage.getItem('avatar')}
+                src={getFullAvatarUrl(userProfile?.avatar_url) || localStorage.getItem('avatar')}
                 icon={<UserOutlined />}
                 style={{ marginBottom: 12 }}
               />
