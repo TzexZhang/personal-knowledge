@@ -53,6 +53,60 @@ app.include_router(tags.router, prefix="/api/tags", tags=["标签"])
 app.include_router(notes.router, prefix="/api/notes", tags=["笔记"])
 
 
+def migrate_database():
+    """
+    自动迁移数据库：添加缺失的字段
+    """
+    from sqlalchemy import text, inspect
+
+    try:
+        inspector = inspect(engine)
+
+        # 检查并迁移 categories 表
+        if 'categories' in inspector.get_table_names():
+            columns = [col['name'] for col in inspector.get_columns('categories')]
+
+            with engine.connect() as conn:
+                # 添加 color 字段
+                if 'color' not in columns:
+                    logger.info("迁移: 为 categories 表添加 color 字段...")
+                    conn.execute(text(
+                        "ALTER TABLE categories "
+                        "ADD COLUMN color VARCHAR(20) NULL COMMENT '分类颜色' AFTER description"
+                    ))
+                    conn.commit()
+                    logger.info("✅ categories.color 字段添加成功")
+
+                # 添加 sort_order 字段
+                if 'sort_order' not in columns:
+                    logger.info("迁移: 为 categories 表添加 sort_order 字段...")
+                    conn.execute(text(
+                        "ALTER TABLE categories "
+                        "ADD COLUMN sort_order INT DEFAULT 0 COMMENT '排序顺序' AFTER color"
+                    ))
+                    conn.commit()
+                    logger.info("✅ categories.sort_order 字段添加成功")
+
+        # 检查并迁移 tags 表
+        if 'tags' in inspector.get_table_names():
+            columns = [col['name'] for col in inspector.get_columns('tags')]
+
+            with engine.connect() as conn:
+                # 添加 color 字段
+                if 'color' not in columns:
+                    logger.info("迁移: 为 tags 表添加 color 字段...")
+                    conn.execute(text(
+                        "ALTER TABLE tags "
+                        "ADD COLUMN color VARCHAR(20) NULL COMMENT '标签颜色' AFTER name"
+                    ))
+                    conn.commit()
+                    logger.info("✅ tags.color 字段添加成功")
+
+    except Exception as e:
+        logger.warning(f"数据库迁移警告: {str(e)}")
+        # 不中断启动，继续执行
+
+
 @app.on_event("startup")
 async def startup_event():
     """
@@ -65,6 +119,9 @@ async def startup_event():
         # 创建所有表（如果表已存在则跳过）
         Base.metadata.create_all(bind=engine)
         logger.info("✅ 数据库表创建成功")
+
+        # 自动迁移数据库（添加缺失的字段）
+        migrate_database()
 
         # 测试数据库连接
         with engine.connect() as connection:
