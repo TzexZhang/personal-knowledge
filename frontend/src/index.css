@@ -1,6 +1,24 @@
 /**
  * 全局样式文件
- */
+*/
+
+/* CSS 变量定义 - 适配不同主题色 */
+:root {
+  /* 背景色变量 */
+  --ant-colorBgContainer: #ffffff;
+  --ant-colorBgElevated: #ffffff;
+  --ant-colorBgLayout: #f5f5f5;
+  --ant-colorBgSpotlight: #ffffff;
+
+  /* 暗色主题变量 */
+}
+
+[data-theme='dark'] {
+  --ant-colorBgContainer: #141414;
+  --ant-colorBgElevated: #1f1f1f;
+  --ant-colorBgLayout: #000000;
+  --ant-colorBgSpotlight: #262626;
+}
 
 * {
   margin: 0;
@@ -14,6 +32,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--ant-colorBgLayout, #f5f5f5);
 }
 
 code {

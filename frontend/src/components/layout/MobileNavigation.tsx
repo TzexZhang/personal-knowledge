@@ -50,7 +50,7 @@ const MobileNavigation: React.FC = () => {
         left: 0,
         right: 0,
         zIndex: 1000,
-        backgroundColor: "#fff",
+        backgroundColor: "var(--ant-colorBgContainer)",
         borderTop: "1px solid var(--ant-colorBorderSecondary)",
         boxShadow: "0 -2px 8px rgba(0, 0, 0, 0.1)",
         // 适配 iPhone X 及以上机型的底部安全区域

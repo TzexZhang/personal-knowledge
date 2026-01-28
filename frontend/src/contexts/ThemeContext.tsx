@@ -60,6 +60,16 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [themeMode])
 
+  // 根据主题模式设置 data-theme 属性
+  useEffect(() => {
+    const root = document.documentElement
+    if (isDark) {
+      root.setAttribute('data-theme', 'dark')
+    } else {
+      root.setAttribute('data-theme', 'light')
+    }
+  }, [isDark])
+
   // 切换主题
   const toggleTheme = useCallback((theme?: 'light' | 'dark' | 'system') => {
     const newTheme = theme || (isDark ? 'light' : 'dark')
